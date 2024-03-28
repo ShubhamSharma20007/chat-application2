@@ -6,6 +6,7 @@ import {createBrowserRouter,Router,RouterProvider} from "react-router-dom"
 import Login from './pages/Login'
 import Chat from './pages/Chat.jsx'
 import Register from './pages/Register.jsx'
+import Avatar from './pages/Avatar.jsx'
 
 
 const router = createBrowserRouter([
@@ -20,6 +21,10 @@ const router = createBrowserRouter([
   {
     path: "/",
     element :<Chat/>
+  },
+  {
+    path: "/avatar",
+    element :<Avatar/>
   }
 
 ])

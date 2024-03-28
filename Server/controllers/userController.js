@@ -1,19 +1,19 @@
 const bcrypt = require('bcrypt');
 const UserModel = require("../models/UserModel")
-const register = async (req, res) => {
+const register = async(req, res) => {
 
     try {
         const { username, email, password, con_password } = req.body;
 
         //validation
         if (!username || !email || !password || !con_password) {
-            return res.status(400).send({ message: "All fields are required" })
+            return res.status(400).json({ message: "All fields are required" })
         }
 
         //check email exists or not
         const user = await UserModel.findOne({ email });
         if (user) {
-            return res.status(400).send({ message: "User already exist" })
+            return res.status(400).json({ message: "User already exist" })
         }
 
         // bcrypt password
@@ -21,12 +21,15 @@ const register = async (req, res) => {
 
         //save user
         const userModel = await UserModel.create({
-            username, email, password:bcryptPass
+            username,
+            email,
+            password: bcryptPass
         })
-        
-        return res.status(201).send({ success:true,message: "User created successfully" })
+        delete userModel.password;
+
+        return res.status(201).json({ success: true, message: "User created successfully", user: userModel })
     } catch (error) {
-        return res.status(500).send({success:false, message: "Something went wrong",error:error.message })
+        return res.status(500).json({ success: false, message: "Something went wrong", error: error.message })
     }
 
 }
@@ -34,12 +37,25 @@ const register = async (req, res) => {
 
 // login
 
-const login = async (req, res) => {
+const login = async(req, res) => {
+
     try {
-        
+        const { email, password } = req.body;
+        const userModel = await UserModel.findOne({ email });
+        if (!userModel) {
+            return res.status(404).json({ message: "User not found" })
+        }
+        const isMatch = await bcrypt.compare(password, userModel.password);
+        if (!isMatch) {
+            return res.status(400).json({ message: "Invalid credentials" })
+        }
+        delete userModel.password;
+
+        return res.status(200).json({ success: true, message: "Login successfully", user: userModel })
+
     } catch (error) {
-        
+        return res.status(500).json({ success: false, message: "Something went wrong", error: error.message })
     }
 }
 
-module.exports = { register,login }
+module.exports = { register, login }
