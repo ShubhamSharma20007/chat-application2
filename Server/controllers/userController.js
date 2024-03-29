@@ -58,4 +58,37 @@ const login = async(req, res) => {
     }
 }
 
-module.exports = { register, login }
+const setAvatar = async(req, res) => {
+    try {
+        const {id} = req.params
+        const userModel = await UserModel.findByIdAndUpdate(id,{isAvatarImageSet:true,avatarImage:req.body.avatar},{new:true})
+        if(!userModel){
+            return res.status(404).json({message:"User not found"})
+        }
+        return res.status(200).json({success:true,message:"Avatar image set successfully",user:userModel})
+    } catch (error) {
+        return res.status(500).json({success:false,message:"Something went wrong",error:error.message})
+    }
+}
+
+
+// get all user
+
+const getAlluser = async(req,res)=>{
+    // return console.log(req.params)
+    try {
+        const {id} = req.params
+        const allUser = await UserModel.find({_id:{$ne:id}}).select([
+            "email",
+            "username",
+            'avatarImage',
+            "_id" 
+        ]);
+        return res.status(200).json({success:true,message:"All user",allUser})
+    } catch (error) {
+        return res.status(500).json({success:false,message:"Something went wrong",error:error.message})
+    }
+}
+
+
+module.exports = { register, login,setAvatar,getAlluser }

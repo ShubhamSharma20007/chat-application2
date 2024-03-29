@@ -4,7 +4,9 @@ const Loader = () => {
   return (
     <div>
      
+      <div className="h-screen w-full bg-white absolute left-0 top-0">
       <div className="loader"></div>
+      </div>
     </div>
   )
 }

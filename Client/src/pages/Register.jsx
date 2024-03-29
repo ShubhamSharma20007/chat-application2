@@ -49,7 +49,7 @@ const Register = () => {
   }
 
   return (
-    <div class="w-full flex flex-col justify-center items-center bg-zinc-400  min-h-screen bg-no-repeat  bg-[url('https://images.unsplash.com/photo-1478760329108-5c3ed9d495a0?q=80&w=1974&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D')]">
+    <div class="w-full flex flex-col justify-center items-center bg-zinc-300  min-h-screen">
       <form
         class="bg-white max-w-md  shadow-md rounded px-8 pt-6 pb-8 mb-4"
         onSubmit={handleSubmit(onSubmit)}
