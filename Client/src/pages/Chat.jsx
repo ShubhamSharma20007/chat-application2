@@ -1,13 +1,16 @@
 import React, { useEffect, useState } from 'react';
 import axios from '../../utils/axios';
 import { useNavigate } from 'react-router-dom';
-
+import Contacts from '../components/Contacts';
+import Loader from '../components/Loader';
 const Chat = () => {
   const navigate = useNavigate();
   const [contacts, setContacts] = useState([]);
-  const [currentUser, setCurrentUser] = useState(undefined);
+  const[loading,setLoading] = useState(true)
+  const [currentUser, setCurrentUser] = useState(undefined); // getting the localstorage value
+  const [currentChat, setCurrentChat] = useState(undefined);
+  // console.log(currentChat)
 
-  console.log(contacts)
   useEffect(() => {
     const user = JSON.parse(localStorage.getItem('chat-app-user'));
     if (!user) {
@@ -29,14 +32,32 @@ const Chat = () => {
       const res = await axios.get(`/auth/all-user/${currentUser._id}`);
       const result = res.data;
       if (result.success) {
-        setContacts(result.data);
+        setContacts(result.allUser);
+        setLoading(false)
+      }
+      else{
+        navigate('/avatar')
       }
     } catch (error) {
       console.error('Failed to fetch contacts:', error);
+      setLoading(true)
+    }
+    finally{
+      setLoading(false)
     }
   }
 
-  return <div>{/* Render your chat UI here */}</div>;
+  const handleChatChange =(chat)=>{
+    setCurrentChat(chat)
+  }
+  return(
+    <>
+    {
+      loading &&<Loader/>
+    }
+    <Contacts contacts={contacts} currentUser={currentUser} changechat={handleChatChange}/>
+    </>
+  )
 };
 
 export default Chat;
