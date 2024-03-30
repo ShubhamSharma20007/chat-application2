@@ -9,7 +9,6 @@ const Chat = () => {
   const[loading,setLoading] = useState(true)
   const [currentUser, setCurrentUser] = useState(undefined); // getting the localstorage value
   const [currentChat, setCurrentChat] = useState(undefined);
-  // console.log(currentChat)
 
   useEffect(() => {
     const user = JSON.parse(localStorage.getItem('chat-app-user'));
@@ -50,12 +49,13 @@ const Chat = () => {
   const handleChatChange =(chat)=>{
     setCurrentChat(chat)
   }
+
   return(
     <>
     {
       loading &&<Loader/>
     }
-    <Contacts contacts={contacts} currentUser={currentUser} changechat={handleChatChange}/>
+    <Contacts contacts={contacts} currentUser={currentUser} currentChat={currentChat} changechat={handleChatChange}/>
     </>
   )
 };
