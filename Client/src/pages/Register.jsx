@@ -49,7 +49,7 @@ const Register = () => {
   }
 
   return (
-    <div class="w-full flex flex-col justify-center items-center bg-zinc-300  min-h-screen">
+    <div class="w-full flex flex-col justify-center md:p-0 px-5  items-center bg-zinc-300  min-h-screen">
       <form
         class="bg-white max-w-md  shadow-md rounded px-8 pt-6 pb-8 mb-4"
         onSubmit={handleSubmit(onSubmit)}

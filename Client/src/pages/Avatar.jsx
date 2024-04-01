@@ -78,14 +78,14 @@ if(!localStorage.getItem('chat-app-user')){
       }
      <div className='w-full h-screen bg-zinc-300'>
      <div className="flex justify-center items-center h-full gap-5 flex-col"> 
-     <h1 className='text-3xl mb-16 font-bold tracking-wide'>Pick an avatar as your profile picture</h1>
-     <div className="wrapper flex  gap-5">
+     <h1 className='md:text-3xl text-2xl mb-16 font-bold tracking-wide md:text-start text-center'>Pick an avatar as your profile picture</h1>
+     <div className="wrapper flex  md:gap-5 gap-2">
      {avatars.map((svgString, index) => (
-        <div key={index} onClick={(e)=>setSelectAvatar(svgString)} dangerouslySetInnerHTML={{ __html: svgString }} className='w-28 h-28 bg-white rounded-full hover:ring-4  hover:p-1 ring-violet-700  ' />
+        <div key={index} onClick={(e)=>setSelectAvatar(svgString)} dangerouslySetInnerHTML={{ __html: svgString }} className='md:w-28 md:h-28 w-20 h-20  bg-white rounded-full hover:ring-4  hover:p-1 ring-violet-700  ' />
       ))}
      </div>
 
-     <button  onClick={setProfilePicture} className='h-12 bg-violet-800 hover:bg-violet-900  rounded-md text-white mt-16 px-2' type="button">SET AS PROFILE PICTURE</button>
+     <button  onClick={setProfilePicture} className='h-12 bg-violet-800 hover:bg-violet-900  rounded-md text-white md:mt-16  mt-10 px-2' type="button">SET AS PROFILE PICTURE</button>
      </div>
      </div>
     </div>

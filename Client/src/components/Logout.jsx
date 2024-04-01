@@ -12,7 +12,7 @@ const Logout = () => {
   return (
     <div>
         
-      <BiPowerOff onClick={handleClick} title='logout' className=' bg-zinc-300 p-1 rounded-full '  size={'1.5em'} />
+      <BiPowerOff onClick={handleClick} title='logout' className=' bg-zinc-300 p-1 rounded-full hover:bg-violet-500 hover:ring-2 '  size={'1.5em'} />
     </div>
   )
 }

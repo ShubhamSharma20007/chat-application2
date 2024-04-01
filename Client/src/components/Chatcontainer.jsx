@@ -1,23 +1,26 @@
 import React from "react";
 import ChatInput from "./ChatInput";
-import Message from "./Message";
 import { useState, useEffect } from "react";
+import {v4 as uuidv4} from 'uuid';
 import axios from "../../utils/axios";
-const Chatcontainer = ({ currentChat, currentUser }) => {
-  const [messages, setMessages] = React.useState([]);
+const Chatcontainer = ({ currentChat, currentUser, socket }) => {
+  console.log(socket)
+ const  scrollRef = React.useRef(null)
 
+
+  const [messages, setMessages] = React.useState([]);
+  const [arrivalMessage, setArrivalMessage] = useState(null);
   useEffect(() => {
     handlegetMessage();
   }, [currentChat]);
 
-  console.log(messages);
+
   const handlegetMessage = async () => {
     try {
       const response = await axios.post("/message/get-message", {
         from: currentUser?._id,
         to: currentChat?._id,
       });
-
       setMessages(response.data.data);
     } catch (error) {
       console.log(error);
@@ -31,10 +34,43 @@ const Chatcontainer = ({ currentChat, currentUser }) => {
         to: currentChat?._id,
         message: msg,
       });
+      socket.current.emit("send-msg", {
+        to: currentChat?._id,
+        from: currentUser?._id,
+        message: msg,
+      });
+      const msgs = [...messages, { fromSelf: true, message: msg }];
+      console.log(msgs)
+      setMessages(msgs);
     } catch (error) {
       console.log(error);
     }
   };
+
+
+
+  useEffect(() => {
+    if (socket.current) {
+      socket.current.on("msg-recieve", (msg) => {
+        setArrivalMessage({
+          fromSelf: false,
+          message: msg,
+        });
+      });
+    }
+  }, [messages]);
+  
+  
+  
+
+  useEffect(() => {
+   arrivalMessage && setMessages((prev)=>[...prev,arrivalMessage])
+  },[arrivalMessage])
+
+  useEffect(()=>{
+    scrollRef.current.scrollTop = scrollRef.current.scrollHeight
+
+  },[messages])
   return (
     <div>
       <div className="w-full   flex mb-4 bg-[#fcf7f733]  rounded-sm p-3 items-center justify-start gap-10 px-5">
@@ -47,7 +83,7 @@ const Chatcontainer = ({ currentChat, currentUser }) => {
         </h1>
       </div>
       {/* <Message /> */}
-      <div className="w-full max-h-[70vh] overflow-auto p-5 ">
+      <div className="w-full h-[75vh]  p-5 overflow-auto " ref={scrollRef} key={uuidv4()}>
         {messages &&
           messages.map((message, index) => (
             <>
@@ -56,9 +92,11 @@ const Chatcontainer = ({ currentChat, currentUser }) => {
                   message.fromSelf ? "sended" : "recieved"
                 }`}
               >
-               <div className="content">
-               <p className="text-xl bg-zinc-300 rounded-lg  inline-block px-5  py-2 font-semibold my-3">{message.message}</p>
-               </div>
+                <div className="content">
+                  <p className="text-sm bg-zinc-300 rounded-lg  inline-block px-5  py-2 font-semibold my-3">
+                    {message.message}
+                  </p>
+                </div>
               </div>
             </>
           ))}

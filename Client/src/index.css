@@ -16,3 +16,7 @@
     justify-content: end;
     align-items: center;
 }
+
+#roota-webkit-scrollbar-track{
+    background: #3F3F46;
+}
