@@ -3,11 +3,13 @@ import ChatInput from "./ChatInput";
 import { useState, useEffect } from "react";
 import {v4 as uuidv4} from 'uuid';
 import axios from "../../utils/axios";
+import { useContext } from "react";
+import { SocketContext } from "../Context/SocketContext";
+
 const Chatcontainer = ({ currentChat, currentUser, socket }) => {
-  console.log(socket)
+  const {contetxsocket,contextsetSocket} = useContext(SocketContext);
+  console.log(contetxsocket,1212)
  const  scrollRef = React.useRef(null)
-
-
   const [messages, setMessages] = React.useState([]);
   const [arrivalMessage, setArrivalMessage] = useState(null);
   useEffect(() => {
@@ -40,7 +42,7 @@ const Chatcontainer = ({ currentChat, currentUser, socket }) => {
         message: msg,
       });
       const msgs = [...messages, { fromSelf: true, message: msg }];
-      console.log(msgs)
+      contextsetSocket(msgs)
       setMessages(msgs);
     } catch (error) {
       console.log(error);
@@ -52,7 +54,7 @@ const Chatcontainer = ({ currentChat, currentUser, socket }) => {
   useEffect(() => {
     if (socket.current) {
       socket.current.on("msg-recieve", (msg) => {
-        console.log(msg)
+        
         setArrivalMessage({
           fromSelf: false,
           message: msg,
@@ -66,6 +68,7 @@ const Chatcontainer = ({ currentChat, currentUser, socket }) => {
 
   useEffect(() => {
    arrivalMessage && setMessages((prev)=>[...prev,arrivalMessage])
+   
   },[arrivalMessage])
 
   useEffect(()=>{
