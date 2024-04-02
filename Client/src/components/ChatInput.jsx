@@ -10,18 +10,11 @@ const [showEmojiPicker,setshowEmojiPicker] = useState(false)
 const [message,setmessage] = useState('');
 const [open,setOpen] = useState(false)
 
-const handleClickOutside = (e) => {
- if(!emojiBtn.current && !emojiBtn.current.contains(e.target)){
-  setOpen(false)
- }
-}
 
-useEffect(() => {
-  emojiBtn.current.addEventListener("click", handleClickOutside, true);
-})
 
   const handleEmojiPickerHideShow =()=>{
     setshowEmojiPicker((prev)=>!prev)
+    setOpen(true)
   }
   const handleEmojiClick=(event,emoji)=>{
     let message =[]

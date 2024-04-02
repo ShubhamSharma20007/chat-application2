@@ -26,26 +26,24 @@ const server = app.listen(PORT, () => {
     console.log(`Server is running on port ${PORT}`);
 })
 
-const io = soket(server,{
-    cors:{
-        origin:"http://localhost:5173",
-        credentials:true
+const io = soket(server, {
+    cors: {
+        origin: "http://localhost:5173",
+        credentials: true
     }
-    
+
 })
 
-global.onlineUsers = new Map(); // storing the all user inside this map
-
-io.on("connection",(socket)=>{
+global.onlineUsers = new Map();
+io.on("connection", (socket) => {
     global.chatSocket = socket;
-    socket.on("add-user",(userId)=>{
-        onlineUsers.set(userId,socket.id)
+    socket.on("add-user", (userId) => {
+        onlineUsers.set(userId, socket.id)
     })
-    socket.on("send-msg",(data)=>{
+    socket.on("send-msg", (data) => {
         const sendUserSocket = onlineUsers.get(data.to);
-        if(sendUserSocket){
-            socket.to(sendUserSocket).emit("msg-recieve",data.message)
+        if (sendUserSocket) {
+            socket.to(sendUserSocket).emit("msg-recieve", data.message)
         }
     })
-
 })

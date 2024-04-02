@@ -26,6 +26,23 @@ const Chat = () => {
     }
   }, [currentUser]);
 
+
+  useEffect(() => {
+    const profileCheck =  JSON.parse(localStorage.getItem('chat-app-user'))
+    if(!profileCheck.avatarImage){
+      navigate("/avatar")
+    }
+    else{
+      navigate("/")
+    }
+  },[])
+
+
+
+ 
+
+
+
   async function getContacts() {
     try {
       const res = await axios.get(`/auth/all-user/${currentUser._id}`);
